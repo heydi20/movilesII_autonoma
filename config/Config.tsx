@@ -1,14 +1,20 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from 'firebase/auth';
+import { getAnalytics } from "firebase/analytics";
+import { getAuth } from "firebase/auth";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyDdlq71X9a3ZA65q4_sn9FZjyfJZakXDgA",
-  authDomain: "app-angular-6331a.firebaseapp.com",
-  databaseURL: "https://app-angular-6331a-default-rtdb.firebaseio.com",
-  projectId: "app-angular-6331a",
-  storageBucket: "app-angular-6331a.appspot.com",
-  messagingSenderId: "183868396031",
-  appId: "1:183868396031:web:1a1748a764f9ae9e1997ca"
+  apiKey: "AIzaSyD-yn6RuUH7jTSvCGNYJvG5rjiAlyQe_WM",
+  authDomain: "juego-eab88.firebaseapp.com",
+  databaseURL: "https://juego-eab88-default-rtdb.firebaseio.com",
+  projectId: "juego-eab88",
+  storageBucket: "juego-eab88.firebasestorage.app",
+  messagingSenderId: "1006736094195",
+  appId: "1:1006736094195:web:ba3ef22d21ed0e8a54d886",
+  measurementId: "G-S8WS2LD59Y"
 };
 
 // Initialize Firebase

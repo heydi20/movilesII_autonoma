@@ -1,91 +1,142 @@
-import { StyleSheet, Text, View, TextInput, Button, Alert, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import { StyleSheet, Text, View, TextInput, Button, Alert, TouchableOpacity, ImageBackground } from 'react-native';
+import React, { useState } from 'react';
 
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../config/Config';
 
-export default function LoginScreen( {navigation} : any) {
-    const [correo, setcorreo] = useState("")
-    const [contrasenia, setcontrasenia] = useState("")
+export default function LoginScreen({ navigation }: any) {
+    const [correo, setCorreo] = useState("");
+    const [contrasenia, setContrasenia] = useState("");
 
     function login() {
         signInWithEmailAndPassword(auth, correo, contrasenia)
             .then((userCredential) => {
-                // Signed in 
                 const user = userCredential.user;
                 console.log(user);
-                navigation.navigate("Welcome")
-                // ...
+                setCorreo("");
+                setContrasenia("");
+                navigation.navigate("Welcome");
             })
             .catch((error) => {
                 const errorCode = error.code;
-                const errorMessage = error.message;
+                let titulo = "";
+                let mensaje = "";
 
-                let titulo=""
-                let mensaje=""
-               
-                if( errorCode == 'auth/invalid-credential'){
-                    titulo="Credenciales inválidas"
-                    mensaje="Las credenciales son incorrectas, Verificar"
-                }else if( errorCode == 'auth/invalid-email'){
-                    titulo="Error en correo"
-                    mensaje="Verificar la dirección de correo electrónico"
-                }else{
-                    titulo="Error"
-                    mensaje="Verificar correo y contraseña"
+                switch (errorCode) {
+                    case 'auth/invalid-credential':
+                        titulo = "Credenciales inválidas";
+                        mensaje = "Las credenciales son incorrectas, verificar";
+                        break;
+                    case 'auth/invalid-email':
+                        titulo = "Error en correo";
+                        mensaje = "Verificar la dirección de correo electrónico";
+                        break;
+                    default:
+                        titulo = "Error";
+                        mensaje = "Verificar correo y contraseña";
+                        break;
                 }
 
-                Alert.alert(titulo, mensaje)
-                
-                
+                Alert.alert(titulo, mensaje);
             });
     }
 
     return (
-        <View style={styles.container}>
-            <Text style={{ fontSize: 40 }}>Login</Text>
+        <ImageBackground
+            source={{ uri: "https://4kwallpapers.com/images/walls/thumbs_3t/1326.jpg" }}
+            style={styles.img}
+        >
+            <View style={styles.container}>
+                <Text style={styles.title}>Bienvenido</Text>
+                <Text style={styles.subtitle}>Inicia sesión para continuar</Text>
 
-            <TextInput
-                placeholder='Ingresar correo'
-                style={styles.input}
-                onChangeText={(texto) => setcorreo(texto)}
-            />
+                <TextInput
+                    placeholder="Ingresar correo"
+                    style={styles.input}
+                    value={correo}
+                    onChangeText={(texto) => setCorreo(texto)}
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                />
 
-            <TextInput
-                placeholder='Ingresar contraseña'
-                style={styles.input}
-                onChangeText={(texto) => setcontrasenia(texto)}
-                secureTextEntry
-            />
+                <TextInput
+                    placeholder="Ingresar contraseña"
+                    style={styles.input}
+                    value={contrasenia}
+                    onChangeText={(texto) => setContrasenia(texto)}
+                    secureTextEntry
+                />
 
-            <Button title='Login' onPress={()=> login()} />
-                <TouchableOpacity onPress={()=> navigation.navigate('Registro')}>
-                    <Text style={styles.txt}>Crear una cuenta</Text>
+                <TouchableOpacity style={styles.button} onPress={login}>
+                    <Text style={styles.buttonText}>Iniciar Sesión</Text>
                 </TouchableOpacity>
-            <Button title='Olvidaste la contraseña, da click aquí'
-            onPress={()=> navigation.navigate('Restablecer')}/>
-        </View>
-    )
+
+                <TouchableOpacity onPress={() => navigation.navigate('Registro')}>
+                    <Text style={styles.link}>Crear una cuenta</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => navigation.navigate('Restablecer')}>
+                    <Text style={styles.link}>¿Olvidaste tu contraseña?</Text>
+                </TouchableOpacity>
+            </View>
+        </ImageBackground>
+    );
 }
 
 const styles = StyleSheet.create({
-    input: {
-        fontSize: 35,
-        height: 55,
-        backgroundColor: "#6666",
-        borderRadius: 20,
-        margin: 10,
-        paddingHorizontal: 20,
-        width: "85%"
+    img: {
+        flex: 1,
     },
     container: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        paddingHorizontal: 20,
     },
-    txt:{
-        color:'blue',
-        fontSize:25
-    }
-
-})
+    title: {
+        fontSize: 32,
+        fontWeight: 'bold',
+        color: '#333',
+        marginBottom: 10,
+    },
+    subtitle: {
+        fontSize: 16,
+        color: '#666',
+        marginBottom: 30,
+    },
+    input: {
+        fontSize: 16,
+        height: 50,
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        marginBottom: 15,
+        paddingHorizontal: 15,
+        borderColor: 'black',
+        borderWidth: 1,
+        width: '100%',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        elevation: 3,
+    },
+    button: {
+        backgroundColor: 'purple',
+        paddingVertical: 15,
+        paddingHorizontal: 20,
+        borderRadius: 10,
+        width: '100%',
+        alignItems: 'center',
+        marginVertical: 10,
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    link: {
+        color: '#007BFF',
+        fontSize: 14,
+        marginTop: 10,
+        textDecorationLine: 'underline',
+    },
+});
